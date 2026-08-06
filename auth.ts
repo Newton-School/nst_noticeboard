@@ -74,7 +74,6 @@ export const providerMap = providers
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: MongoDBAdapter(client),
-  session: { strategy: "jwt" },
   providers,
   secret: process.env.AUTH_SECRET || process.env.BETTER_AUTH_SECRET,
   callbacks: {
