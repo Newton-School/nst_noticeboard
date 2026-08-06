@@ -16,10 +16,10 @@ async function HomeSever() {
   const categories = JSON.parse(JSON.stringify(categoriesRaw));
 
   const policiesRaw = await db.collection('policy').find({}).toArray();
-  const rawPolicies = JSON.parse(JSON.stringify(policiesRaw));
+  const policies = JSON.parse(JSON.stringify(policiesRaw));
 
   return (
-    <HomePage categories={categories} rawPolicies={rawPolicies}/>
+    <HomePage categories={categories} policies={policies}/>
   )
 }
 

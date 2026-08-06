@@ -12,11 +12,12 @@ import { IPolicy } from "@/types/policy"
 import { EmptyState } from "./EmptyState"
 import UFMPolicyClient from "@/app/academic/ufm/UFMPolicyClient"
 
-function Home({categories = [], rawPolicies = []} : { categories: ICategory[], rawPolicies: IPolicy[]}) {
-  const [policies, setPolicies] = useState<IPolicy[]>(rawPolicies);
+function Home({categories = [], policies = []} : { categories: ICategory[], policies: IPolicy[]}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategoryFilter, setActiveCategoryFilter] = useState("");
   const [selectedPolicy, setSelectedPolicy] = useState<IPolicy | null>(null);
+
+  console.log("policies: ", policies)
 
   if (selectedPolicy) {
     return (
@@ -29,7 +30,7 @@ function Home({categories = [], rawPolicies = []} : { categories: ICategory[], r
   }
 
   const filteredPolicies = policies.filter((policy) => {
-    const title = policy.title || (policy as any).name || "";
+    const title = policy.title || "";
     const matchesSearch = searchQuery
       ? title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         policy.description.toLowerCase().includes(searchQuery.toLowerCase())

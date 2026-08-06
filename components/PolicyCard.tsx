@@ -56,7 +56,7 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({ policy, onSelect }) => {
 
         {/* Policy Title */}
         <h4 className="text-[20px] font-bold text-[#0d0e12] group-hover:text-black transition-colors tracking-tight">
-          {policy.title || (policy as any).name}
+          {policy.title}
         </h4>
 
         {/* Policy Description */}
