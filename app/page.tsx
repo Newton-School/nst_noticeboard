@@ -1,12 +1,14 @@
 import { auth } from "@/auth"
 import { getDb } from "@/lib/db";
 import HomePage from "@/components/HomePage";
+import { redirect } from 'next/navigation';
 
 async function HomeSever() {
 
   const session = await auth();
-  if(!session || session.user.role !== "admin")
-    throw new Error("Unauthorized access")
+  if(!session || session.user.role !== "admin"){
+    redirect('/signin')
+  }
 
   const db = await getDb();
 
