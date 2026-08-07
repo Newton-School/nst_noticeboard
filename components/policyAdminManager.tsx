@@ -131,7 +131,7 @@ export default function PolicyAdminManager({
               required
               defaultValue={editingPolicy?.description || ""}
               rows={3}
-              className="w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 rounded-[8px] px-3.5 py-2.5 text-[14px] text-black outline-none transition-all placeholder:text-gray-400 resize-y min-h-[80px]"
+              className="w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 rounded-[8px] px-3.5 py-2.5 text-[14px] text-black outline-none transition-all placeholder:text-gray-400 resize-y min-h-20"
             />
           </div>
 
@@ -146,7 +146,7 @@ export default function PolicyAdminManager({
               required
               defaultValue={editingPolicy?.fullContent || ""}
               rows={5}
-              className="w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 rounded-[8px] px-3.5 py-2.5 text-[14px] text-black outline-none transition-all placeholder:text-gray-400 resize-y min-h-[120px]"
+              className="w-full bg-white border border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 rounded-[8px] px-3.5 py-2.5 text-[14px] text-black outline-none transition-all placeholder:text-gray-400 resize-y min-h-30"
             />
           </div>
 

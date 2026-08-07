@@ -47,7 +47,7 @@ export default async function AdminPolicyPage() {
 
   return (
     <div className="bg-[#FAF9F6] min-h-screen py-8 px-4 sm:px-8 md:px-12">
-      <div className="max-w-[1240px] mx-auto">
+      <div className="max-w-310 mx-auto">
         {/* Navigation / Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>

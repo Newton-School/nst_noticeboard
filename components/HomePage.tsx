@@ -1,31 +1,28 @@
 "use client";
 
-import { HeroSection } from "@/components/HeroSection"
-import { Navbar } from "@/components/Navbar"
-import { PolicyCard } from "@/components/PolicyCard"
-import { PolicyDetailModal } from "@/components/PolicyDetailModal"
-import { QuickAccessGrid } from "@/components/QuickAccessGrid"
-import { ICategory } from "@/types/category"
-import { useState } from "react"
-import { Badge } from "@/components/ui/badge"
-import { IPolicy } from "@/types/policy"
-import { EmptyState } from "./EmptyState"
-import UFMPolicyClient from "@/app/academic/ufm/UFMPolicyClient"
+import { HeroSection } from "@/components/HeroSection";
+import { Navbar } from "@/components/Navbar";
+import { PolicyCard } from "@/components/PolicyCard";
+import { PolicyDetailModal } from "@/components/PolicyDetailModal";
+import { QuickAccessGrid } from "@/components/QuickAccessGrid";
+import { ICategory } from "@/types/category";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
+import { IPolicy } from "@/types/policy";
+import { EmptyState } from "./EmptyState";
 
-function Home({categories = [], policies = []} : { categories: ICategory[], policies: IPolicy[]}) {
+function Home({
+  categories = [],
+  policies = [],
+}: {
+  categories: ICategory[];
+  policies: IPolicy[];
+}) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategoryFilter, setActiveCategoryFilter] = useState("");
   const [selectedPolicy, setSelectedPolicy] = useState<IPolicy | null>(null);
-
-  if (selectedPolicy) {
-    return (
-      <UFMPolicyClient
-        initialPolicies={policies}
-        defaultSelectedPolicy={selectedPolicy}
-        onBack={() => setSelectedPolicy(null)}
-      />
-    );
-  }
 
   const filteredPolicies = policies.filter((policy) => {
     const title = policy.title || "";
@@ -53,13 +50,13 @@ function Home({categories = [], policies = []} : { categories: ICategory[], poli
       {/* Main Content Wrapper */}
       <div className="max-w-310 mx-auto">
         {/* Modular Navigation Bar */}
-        <Navbar
+        <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
+        {/* Modular Hero Section */}
+        <HeroSection
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
-
-        {/* Modular Hero Section */}
-        <HeroSection searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
         {/* Modular Quick Access Grid */}
         <QuickAccessGrid
@@ -69,42 +66,49 @@ function Home({categories = [], policies = []} : { categories: ICategory[], poli
         />
         <section id="directory" className="mt-14 mb-20">
           <div className="lg:col-span-9">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5">
-                <div>
-                  <h3 className="text-[24px] font-bold text-[#0d0e12] tracking-tight">
-                    Recently Updated
-                  </h3>
-                  <p className="text-[13.5px] text-gray-500">
-                    Official regulatory documentation and academic policy records
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 self-start sm:self-auto">
-                  <Badge variant="secondary" className="px-3.5 py-1.5 text-[13px] font-normal text-gray-700 bg-[#F4F2EC]">
-                    Showing <span className="font-bold text-black mx-1">{filteredPolicies.length}</span> of {policies.length} policies
-                  </Badge>
-                </div>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5">
+              <div>
+                <h3 className="text-[24px] font-bold text-[#0d0e12] tracking-tight">
+                  Recently Updated
+                </h3>
+                <p className="text-[13.5px] text-gray-500">
+                  Official regulatory documentation and academic policy records
+                </p>
               </div>
-
-              {/* Policy Cards List or Empty State */}
-              {policies.length === 0 ? (
-                <EmptyState isDatabaseEmpty={true} />
-              ) : filteredPolicies.length > 0 ? (
-                <div className="space-y-4">
-                  {filteredPolicies.map((policy, index) => (
-                    <PolicyCard
-                      key={String(policy._id || index)}
-                      policy={policy}
-                      onSelect={(p) => setSelectedPolicy(p)}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <EmptyState
-                  isDatabaseEmpty={false}
-                  onResetFilters={handleResetFilters}
-                />
-              )}
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                <Badge
+                  variant="secondary"
+                  className="px-3.5 py-1.5 text-[13px] font-normal text-gray-700 bg-[#F4F2EC]"
+                >
+                  Showing{" "}
+                  <span className="font-bold text-black mx-1">
+                    {filteredPolicies.length}
+                  </span>{" "}
+                  of {policies.length} policies
+                </Badge>
+              </div>
             </div>
+
+            {/* Policy Cards List or Empty State */}
+            {policies.length === 0 ? (
+              <EmptyState isDatabaseEmpty={true} />
+            ) : filteredPolicies.length > 0 ? (
+              <div className="space-y-4">
+                {filteredPolicies.map((policy, index) => (
+                  <PolicyCard
+                    key={String(policy._id || index)}
+                    policy={policy}
+                    onSelect={(p) => router.push(`/policy?id=${p._id}`)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <EmptyState
+                isDatabaseEmpty={false}
+                onResetFilters={handleResetFilters}
+              />
+            )}
+          </div>
         </section>
       </div>
 
@@ -113,7 +117,7 @@ function Home({categories = [], policies = []} : { categories: ICategory[], poli
         onClose={() => setSelectedPolicy(null)}
       />
     </div>
-  )
+  );
 }
 
 export default Home;
