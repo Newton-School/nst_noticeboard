@@ -11,6 +11,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV MONGODB_URI=mongodb://localhost:27017/dummy
+ENV AUTH_SECRET=dummy_auth_secret_must_be_at_least_32_characters_long
 RUN npm run build
 
 # Stage 3: Runner
