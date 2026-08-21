@@ -50,7 +50,7 @@ function Home({
       {/* Main Content Wrapper */}
       <div className="max-w-310 mx-auto">
         {/* Modular Navigation Bar */}
-        <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <Navbar />
 
         {/* Modular Hero Section */}
         <HeroSection
