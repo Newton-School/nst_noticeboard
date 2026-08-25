@@ -1,125 +1,109 @@
 "use client";
 
-import React from "react";
-import { Search, GraduationCap, Sparkles, FileText, Calendar, ShieldCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React, { useRef, useEffect } from "react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 interface HeroSectionProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  userName?: string | null;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ searchQuery, setSearchQuery }) => {
+export const HeroSection: React.FC<HeroSectionProps> = ({
+  searchQuery,
+  setSearchQuery,
+  userName,
+}) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Extract first name or fallback to Student
+  const displayName = userName ? userName.trim().split(" ")[0] : "Student";
+
+  // Keyboard shortcut listener for Cmd+K / Ctrl+K
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const handleSearchSubmit = () => {
+    const directorySection = document.getElementById("directory");
+    directorySection?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handlePillClick = (tag: string) => {
+    setSearchQuery(tag);
+    handleSearchSubmit();
+  };
+
+  const recommendedPills = [
+    { title: "Attendance Policy", query: "Attendance Policy" },
+    { title: "Examination Rules", query: "Examination Rules" },
+  ];
+
   return (
-    <main className="relative mt-12 md:mt-16 mb-16 text-center max-w-4xl mx-auto flex flex-col items-center">
+    <div className="w-full relative min-h-[calc(100vh-2rem)] bg-[url('/bg_main.png')] bg-cover bg-right-bottom sm:bg-right bg-no-repeat flex flex-col justify-start p-6 sm:p-10 lg:p-14 pl-24 sm:pl-40 lg:pl-56 pt-32 sm:pt-36 lg:pt-40 pb-16 transition-all overflow-hidden">
+      
+      {/* CENTRAL OPEN SKY CONTENT OVERLAY */}
+      <div className="w-full lg:w-8/12 flex flex-col items-start text-left z-10">
+        
+        {/* DYNAMIC USER GREETING */}
+        <h1 className="text-5xl sm:text-6xl lg:text-[68px] font-black tracking-tight text-slate-950 leading-tight">
+          Hey {displayName}!
+        </h1>
 
-      {/* LEFT 3D Floating Tile Cluster */}
-      <div className="hidden lg:block absolute -left-12 xl:-left-20 top-2 w-55 h-65 pointer-events-none select-none">
-        <div className="absolute top-10 left-2 w-13 h-13 rounded-[10px] bg-linear-to-b from-white via-[#faf8f4] to-[#ebe7de] border border-[#e2ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.07),inset_0_1.5px_1px_rgba(255,255,255,1)] flex items-center justify-center">
-          <GraduationCap className="w-6 h-6 text-[#4a4c52]" />
-        </div>
+        {/* SUBTITLE */}
+        <p className="text-lg sm:text-xl font-bold text-slate-800 mt-3 mb-8 max-w-lg leading-relaxed">
+          Find policies, notices and events all in one place.
+        </p>
 
-        <div className="absolute top-0 left-20 w-13 h-13 rounded-[10px] bg-[#00e685] border border-[#00d077] shadow-[0_8px_18px_rgba(0,230,133,0.35)] flex items-center justify-center">
-          <Sparkles className="w-6 h-6 text-[#044d28]" />
-        </div>
-
-        <div className="absolute top-28 left-6 w-13 h-13 rounded-[10px] bg-linear-to-b from-white via-[#faf8f4] to-[#ebe7de] border border-[#e2ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.07),inset_0_1.5px_1px_rgba(255,255,255,1)] flex items-center justify-center">
-          <FileText className="w-6 h-6 text-[#4a4c52]" />
-        </div>
-
-        <div className="absolute top-18 left-24 w-13 h-13 rounded-[10px] bg-linear-to-b from-white via-[#faf8f4] to-[#ebe7de] border border-[#e2ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.07),inset_0_1.5px_1px_rgba(255,255,255,1)]" />
-
-        <div className="absolute top-44 left-10 w-13 h-13 rounded-[10px] bg-[#ffc800] border border-[#eaa800] shadow-[0_8px_18px_rgba(255,200,0,0.35)] flex items-center justify-center">
-          <svg viewBox="0 0 24 24" className="w-6 h-6 stroke-[#523e00] stroke-[2.5] fill-none">
-            <circle cx="12" cy="12" r="9" />
-            <circle cx="12" cy="12" r="4" fill="#523e00" />
-          </svg>
-        </div>
-
-        <div className="absolute top-36 left-32 w-13 h-13 rounded-[10px] bg-linear-to-b from-white via-[#faf8f4] to-[#ebe7de] border border-[#e2ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.07),inset_0_1.5px_1px_rgba(255,255,255,1)]" />
-        <div className="absolute top-52 left-24 w-13 h-13 rounded-[10px] bg-linear-to-b from-white via-[#faf8f4] to-[#ebe7de] border border-[#e2ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.07),inset_0_1.5px_1px_rgba(255,255,255,1)]" />
-      </div>
-
-      {/* RIGHT 3D Floating Tile Cluster */}
-      <div className="hidden lg:block absolute -right-12 xl:-right-20 top-2 w-55 h-65 pointer-events-none select-none">
-        <div className="absolute top-0 right-20 w-13 h-13 rounded-[10px] bg-linear-to-b from-white via-[#faf8f4] to-[#ebe7de] border border-[#e2ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.07),inset_0_1.5px_1px_rgba(255,255,255,1)] flex items-center justify-center">
-          <Calendar className="w-6 h-6 text-[#4a4c52]" />
-        </div>
-
-        <div className="absolute top-10 right-6 w-13 h-13 rounded-[10px] bg-linear-to-b from-white via-[#faf8f4] to-[#ebe7de] border border-[#e2ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.07),inset_0_1.5px_1px_rgba(255,255,255,1)]" />
-
-        <div className="absolute top-20 right-28 w-13 h-13 rounded-[10px] bg-linear-to-b from-white via-[#faf8f4] to-[#ebe7de] border border-[#e2ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.07),inset_0_1.5px_1px_rgba(255,255,255,1)] flex items-center justify-center">
-          <ShieldCheck className="w-6 h-6 text-[#4a4c52]" />
-        </div>
-
-        <div className="absolute top-36 right-44 w-13 h-13 rounded-[10px] bg-[#00e685] border border-[#00d077] shadow-[0_8px_18px_rgba(0,230,133,0.35)] flex items-center justify-center">
-          <Sparkles className="w-6 h-6 text-[#044d28]" />
-        </div>
-
-        <div className="absolute top-28 right-14 w-13 h-13 rounded-[10px] bg-linear-to-b from-white via-[#faf8f4] to-[#ebe7de] border border-[#e2ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.07),inset_0_1.5px_1px_rgba(255,255,255,1)]" />
-
-        <div className="absolute top-44 right-10 w-13 h-13 rounded-[10px] bg-[#ffc800] border border-[#eaa800] shadow-[0_8px_18px_rgba(255,200,0,0.35)] flex items-center justify-center">
-          <svg viewBox="0 0 24 24" className="w-6 h-6 stroke-[#523e00] stroke-[2.5] fill-none">
-            <circle cx="12" cy="12" r="9" />
-            <circle cx="12" cy="12" r="4" fill="#523e00" />
-          </svg>
-        </div>
-
-        <div className="absolute top-36 right-0 w-13 h-13 rounded-[10px] bg-linear-to-b from-white via-[#faf8f4] to-[#ebe7de] border border-[#e2ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.07),inset_0_1.5px_1px_rgba(255,255,255,1)]" />
-        <div className="absolute top-52 right-24 w-13 h-13 rounded-[10px] bg-linear-to-b from-white via-[#faf8f4] to-[#ebe7de] border border-[#e2ddd0] shadow-[0_8px_18px_rgba(0,0,0,0.07),inset_0_1.5px_1px_rgba(255,255,255,1)]" />
-      </div>
-
-      {/* Hero Main Heading */}
-      <h1 className="text-5xl sm:text-6xl md:text-[76px] font-bold tracking-[-0.035em] text-[#0d0e12] leading-[1.04]">
-        Student Policy
-        <br />
-        Portal
-      </h1>
-
-      {/* Hero Subtitle */}
-      <p className="text-base sm:text-lg md:text-[19px] text-[#505258] mt-5 leading-relaxed font-normal max-w-140">
-        Find the official guidelines, handbooks, and regulations necessary for your academic journey. Search directly or browse by category.
-      </p>
-
-      {/* Hero Search Box */}
-      <div className="mt-8 w-full max-w-155 relative flex items-center bg-[#F4F2EC] p-2 rounded-[10px] border border-[#E6E2D8] shadow-sm">
-        <Search className="w-5 h-5 text-gray-500 ml-3 shrink-0" />
-        <Input
-          type="text"
-          placeholder="e.g., 'Attendance Rules', 'UFM Policy', 'Hostel Leave'"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-[15px] h-11 text-black placeholder:text-gray-400"
-        />
-        <Button
-          variant="dark"
-          size="lg"
-          onClick={() => {
-            const directorySection = document.getElementById("directory");
-            directorySection?.scrollIntoView({ behavior: "smooth" });
-          }}
-          className="shrink-0"
-        >
-          Search
-        </Button>
-      </div>
-
-      {/* Quick Search Tag Chips */}
-      <div className="flex flex-wrap items-center justify-center gap-2 mt-4 text-[13px] text-gray-500">
-        <span className="font-medium text-gray-400">Popular searches:</span>
-        {["UFM 2024", "Attendance Rules", "Exam Timetable", "Hostel Regulations"].map((tag) => (
-          <Button
-            key={tag}
-            variant="soft"
-            size="sm"
-            onClick={() => setSearchQuery(tag)}
-            className="h-7 text-xs font-semibold text-[#3a3b40]"
+        {/* SEARCH INPUT CAPSULE BAR */}
+        <div className="w-full max-w-xl relative flex items-center bg-white/95 backdrop-blur-md p-2.5 rounded-full border border-slate-200/90 shadow-2xl shadow-blue-500/15 group focus-within:border-blue-500/60 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all mb-5">
+          <Search className="w-6 h-6 text-slate-400 group-focus-within:text-blue-600 transition-colors ml-4 shrink-0" />
+          <Input
+            ref={inputRef}
+            type="text"
+            placeholder="Search policies, rules, guidelines..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearchSubmit();
+            }}
+            className="bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-base md:text-lg h-12 text-slate-900 placeholder:text-slate-400 font-semibold px-4"
+          />
+          <kbd className="hidden sm:inline-flex items-center px-2.5 py-1.5 text-xs font-mono font-medium text-slate-400 bg-slate-100 rounded-md border border-slate-200 mr-2 shrink-0 select-none">
+            ⌘ K
+          </kbd>
+          <button
+            onClick={handleSearchSubmit}
+            className="w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/30 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+            title="Search"
           >
-            {tag}
-          </Button>
-        ))}
+            <Search className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* RECOMMENDED SMALL PILLS */}
+        <div className="flex flex-wrap items-center gap-2.5 max-w-xl">
+          {recommendedPills.map((pill) => (
+            <button
+              key={pill.title}
+              onClick={() => handlePillClick(pill.query)}
+              className="px-4 py-2 rounded-full bg-white/90 hover:bg-white backdrop-blur-md border border-slate-200/90 text-xs sm:text-sm font-extrabold text-slate-900 hover:text-blue-600 hover:border-blue-400 shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              {pill.title}
+            </button>
+          ))}
+        </div>
+
       </div>
-    </main>
+
+    </div>
   );
 };

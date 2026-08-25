@@ -1,13 +1,12 @@
-import { auth } from "@/auth"
+import { auth } from "@/auth";
 import { getDb } from "@/lib/db";
 import HomePage from "@/components/HomePage";
 import { redirect } from 'next/navigation';
 
 async function HomeSever() {
-
   const session = await auth();
-  if(!session){
-    redirect('/signin')
+  if (!session) {
+    redirect('/signin');
   }
 
   const db = await getDb();
@@ -19,8 +18,12 @@ async function HomeSever() {
   const policies = JSON.parse(JSON.stringify(policiesRaw));
 
   return (
-    <HomePage categories={categories} policies={policies}/>
-  )
+    <HomePage
+      user={session?.user}
+      categories={categories}
+      policies={policies}
+    />
+  );
 }
 
 export default HomeSever;
