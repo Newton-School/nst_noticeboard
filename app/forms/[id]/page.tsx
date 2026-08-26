@@ -1,8 +1,6 @@
-import { ObjectId } from "mongodb";
 import { notFound } from "next/navigation";
 import FormRenderer from "@/components/forms/FormRenderer";
-import { getDb } from "@/lib/db";
-import { IForm } from "@/types/form";
+import { loadForm } from "@/lib/forms";
 
 export const revalidate = 0;
 
@@ -12,31 +10,9 @@ export default async function FormPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  if (!ObjectId.isValid(id)) notFound();
 
-  const db = await getDb();
-  const raw = await db
-    .collection<IForm>("form")
-    .findOne({ _id: new ObjectId(id) });
-
-  if (!raw) notFound();
-
-  const form: IForm = {
-    _id: raw._id.toString(),
-    title: raw.title || "Untitled form",
-    description: raw.description || "",
-    acceptingResponses: raw.acceptingResponses ?? true,
-    questions: (raw.questions || []).map((question) => ({
-      id: question.id,
-      type: question.type,
-      title: question.title || "",
-      description: question.description || "",
-      required: Boolean(question.required),
-      ...(question.choices ? { choices: question.choices } : {}),
-    })),
-    createdAt: new Date(raw.createdAt).toISOString(),
-    updatedAt: new Date(raw.updatedAt).toISOString(),
-  };
+  const form = await loadForm(id);
+  if (!form) notFound();
 
   if (!form.acceptingResponses) {
     return (

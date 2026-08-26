@@ -48,3 +48,33 @@ export type SubmitState =
   | { status: "idle" }
   | { status: "error"; errors: FormErrors; message?: string }
   | { status: "success" };
+
+export interface QuestionDraft {
+  id: string;
+  type: QuestionType;
+  title: string;
+  description: string;
+  required: boolean;
+  choices: IChoice[];
+}
+
+export interface FormDraft {
+  title: string;
+  description: string;
+  acceptingResponses: boolean;
+  questions: QuestionDraft[];
+}
+
+export type SaveFormState =
+  | { status: "idle" }
+  | { status: "error"; errors: FormErrors; message?: string }
+  | { status: "saved"; formId: string };
+
+export interface FormSummary {
+  _id: string;
+  title: string;
+  questionCount: number;
+  responseCount: number;
+  acceptingResponses: boolean;
+  updatedAt: string;
+}
