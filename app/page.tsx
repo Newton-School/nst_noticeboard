@@ -17,13 +17,23 @@ async function HomeSever() {
   const policiesRaw = await db.collection('policy').find({}).toArray();
   const policies = JSON.parse(JSON.stringify(policiesRaw));
 
+  let events = [];
+  try {
+    const eventsRaw = await db.collection('event').find({}).toArray();
+    events = JSON.parse(JSON.stringify(eventsRaw));
+  } catch (err) {
+    events = [];
+  }
+
   return (
     <HomePage
       user={session?.user}
       categories={categories}
       policies={policies}
+      events={events}
     />
   );
 }
+
 
 export default HomeSever;

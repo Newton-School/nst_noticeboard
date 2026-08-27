@@ -16,6 +16,8 @@ import {
   X,
 } from "lucide-react";
 
+import { getUserAvatar } from "@/lib/utils";
+
 interface AdminSidebarProps {
   userEmail?: string | null;
 }
@@ -104,9 +106,16 @@ export default function AdminSidebar({ userEmail }: AdminSidebarProps) {
         {/* Footer Area */}
         <div className="pt-6 border-t border-slate-100 space-y-3">
           {userEmail && (
-            <div className="px-3 py-2 rounded-xl bg-[#FAF9F6] border border-[#E6E2D8]">
-              <p className="text-[10px] font-bold text-slate-400 uppercase">Logged in as</p>
-              <p className="text-xs font-extrabold text-slate-800 truncate">{userEmail}</p>
+            <div className="px-3 py-2 rounded-xl bg-[#FAF9F6] border border-[#E6E2D8] flex items-center gap-2.5">
+              <img
+                src={getUserAvatar(userEmail)}
+                alt="Admin Avatar"
+                className="w-8 h-8 rounded-full border border-blue-200 bg-blue-50/50 shrink-0"
+              />
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-bold text-slate-400 uppercase">Logged in as</p>
+                <p className="text-xs font-extrabold text-slate-800 truncate">{userEmail}</p>
+              </div>
             </div>
           )}
 
@@ -122,3 +131,4 @@ export default function AdminSidebar({ userEmail }: AdminSidebarProps) {
     </>
   );
 }
+

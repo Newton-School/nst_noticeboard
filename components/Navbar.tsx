@@ -16,6 +16,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { getUserAvatar } from "@/lib/utils";
 
 interface NavbarProps {
   activeTab?: string;
@@ -41,6 +42,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showSignOutModal, setShowSignOutModal] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  const avatarUrl = getUserAvatar(user?.email, user?.name, user?.image);
 
   useEffect(() => {
     setMounted(true);
@@ -145,8 +148,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               className="flex items-center gap-1.5 p-0.5 rounded-full hover:bg-white/80 transition-colors cursor-pointer"
             >
-              <Avatar className="w-9 h-9 sm:w-10 sm:h-10 border-2 border-blue-200 shadow-2xs bg-blue-600 text-white">
-                <AvatarImage src={user?.image || undefined} alt={user?.name || "User"} />
+              <Avatar className="w-9 h-9 sm:w-10 sm:h-10 border-2 border-blue-200 shadow-2xs bg-blue-50 text-slate-900 overflow-hidden">
+                <AvatarImage src={avatarUrl} alt={user?.name || "User Profile Photo"} />
                 <AvatarFallback className="bg-blue-600 text-white font-bold text-xs">
                   {getUserInitials(user?.name)}
                 </AvatarFallback>
@@ -156,10 +159,17 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Profile Dropdown */}
             {showProfileMenu && (
-              <div className="absolute right-0 mt-3 w-52 bg-white rounded-2xl border border-slate-200 shadow-2xl p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="px-3 py-2 border-b border-slate-100 mb-1">
-                  <p className="text-xs font-bold text-slate-900 truncate">{user?.name || "Student User"}</p>
-                  <p className="text-[11px] text-slate-500 truncate">{user?.email || "Student Account"}</p>
+              <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl border border-slate-200 shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="px-3 py-2.5 border-b border-slate-100 mb-1 flex items-center gap-3">
+                  <img
+                    src={avatarUrl}
+                    alt="Profile Avatar"
+                    className="w-9 h-9 rounded-full border border-blue-200 bg-blue-50/50 shrink-0"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold text-slate-900 truncate">{user?.name || "Student User"}</p>
+                    <p className="text-[11px] text-slate-500 truncate">{user?.email || "Student Account"}</p>
+                  </div>
                 </div>
                 {user?.role === "admin" && (
                   <Link
@@ -187,6 +197,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
       </header>
+
 
       {/* Sign Out Confirmation Modal Portal */}
       {mounted && showSignOutModal && createPortal(
