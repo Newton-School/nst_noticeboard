@@ -153,8 +153,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               <Avatar className="w-9 h-9 sm:w-10 sm:h-10 border-2 border-blue-200 shadow-2xs bg-blue-50 text-slate-900 overflow-hidden">
                 <AvatarImage src={avatarUrl} alt={user?.name || "User Profile Photo"} />
                 <AvatarFallback className="bg-blue-600 text-white font-bold text-xs">
-                  {getUserInitials(currentUser?.name || currentUser?.email)}
+                  {getUserInitials(user?.name || user?.email)}
                 </AvatarFallback>
+
               </Avatar>
               <ChevronDown className="w-4 h-4 text-slate-700" />
             </button>
@@ -173,7 +174,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <p className="text-[11px] text-slate-500 truncate">{user?.email || "Student Account"}</p>
                   </div>
                 </div>
-                {currentUser?.role === "admin" && (
+                {user?.role === "admin" && (
+
                   <Link
                     href="/admin"
                     onClick={() => setShowProfileMenu(false)}

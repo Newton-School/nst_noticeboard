@@ -5,12 +5,14 @@ import { Navbar } from "@/components/Navbar";
 import { NoticeCard } from "@/components/NoticeCard";
 import { EventCard, EventItem } from "@/components/EventCard";
 import { PolicyDetailModal } from "@/components/PolicyDetailModal";
+import { Footer } from "@/components/Footer";
 import { ICategory } from "@/types/category";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { IPolicy } from "@/types/policy";
 import { Clock, Calendar, Megaphone, ChevronRight, BookOpen } from "lucide-react";
 import Link from "next/link";
+
 
 interface UserProfile {
   name?: string | null;
@@ -20,12 +22,11 @@ interface UserProfile {
 }
 
 function Home({
-  categories = [],
   policies = [],
   events = [],
   user,
 }: {
-  categories: ICategory[];
+  categories?: ICategory[];
   policies: IPolicy[];
   events?: EventItem[];
   user?: UserProfile | null;
@@ -114,12 +115,12 @@ function Home({
                 userName={user?.name}
               />
 
-              {/* SIDE-BY-SIDE FEED SECTION IN WHITE CANVAS FRAME */}
-              <div id="directory" className="relative bg-white px-4 sm:px-8 lg:px-12 py-10 sm:py-14 transition-all">
+              {/* SIDE-BY-SIDE FEED SECTION WITH TREE OVERLAP ON CARDS */}
+              <div id="directory" className="relative z-10 bg-transparent px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8 pb-4 transition-all">
                 <div className="max-w-[1360px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
                   
                   {/* LEFT CONTAINER CARD: IMPORTANT NOTICES */}
-                  <div className="bg-white rounded-[24px] p-5 sm:p-6 border border-slate-100/90 shadow-sm flex flex-col justify-between h-full min-h-[380px]">
+                  <div className="bg-white rounded-[24px] p-5 sm:p-6 border border-slate-100/90 shadow-md flex flex-col justify-between h-full relative z-10">
                     
                     {/* HEADER ROW */}
                     <div className="flex items-center justify-between pb-4 border-b border-slate-100/80 mb-4">
@@ -132,7 +133,7 @@ function Home({
                         </h3>
                       </div>
                       <Link
-                        href="/"
+                        href="/policies"
                         className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors group"
                       >
                         View all
@@ -155,18 +156,30 @@ function Home({
                         ))}
                       </div>
                     ) : (
-                      <div className="my-auto py-12 px-4 text-center flex flex-col items-center justify-center flex-1">
+                      <div className="my-auto py-8 px-4 text-center flex flex-col items-center justify-center flex-1">
                         <BookOpen className="w-10 h-10 text-slate-300 mb-2" />
-                        <h4 className="text-base font-bold text-slate-800">No Important Notices</h4>
+                        <h4 className="text-base font-bold text-slate-800">
+                          {searchQuery || activeCategoryFilter ? "No Matching Notices" : "No Important Notices"}
+                        </h4>
                         <p className="text-xs text-slate-500 max-w-sm mt-1 font-medium">
-                          There are currently no notices or policies published.
+                          {searchQuery || activeCategoryFilter
+                            ? "No notices matched your active search filters."
+                            : "There are currently no notices or policies published."}
                         </p>
+                        {(searchQuery || activeCategoryFilter) && (
+                          <button
+                            onClick={handleResetFilters}
+                            className="mt-3 inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors cursor-pointer"
+                          >
+                            Clear search filters
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
 
                   {/* RIGHT CONTAINER CARD: UPCOMING EVENTS */}
-                  <div className="bg-white rounded-[24px] p-5 sm:p-6 border border-slate-100/90 shadow-sm flex flex-col justify-between h-full min-h-[380px]">
+                  <div className="bg-white rounded-[24px] p-5 sm:p-6 border border-slate-100/90 shadow-md flex flex-col justify-between h-full relative z-10">
                     
                     {/* HEADER ROW */}
                     <div className="flex items-center justify-between pb-4 border-b border-slate-100/80 mb-4">
@@ -179,13 +192,14 @@ function Home({
                         </h3>
                       </div>
                       <Link
-                        href="/"
+                        href="/events"
                         className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors group"
                       >
                         View all
                         <ChevronRight className="w-4 h-4 text-blue-600 group-hover:translate-x-0.5 transition-transform" />
                       </Link>
                     </div>
+
 
                     {/* EVENTS LIST OR EMPTY STATE */}
                     {displayEvents.length > 0 ? (
@@ -200,7 +214,7 @@ function Home({
                         ))}
                       </div>
                     ) : (
-                      <div className="my-auto py-12 px-4 text-center flex flex-col items-center justify-center flex-1">
+                      <div className="my-auto py-8 px-4 text-center flex flex-col items-center justify-center flex-1">
                         <Calendar className="w-10 h-10 text-slate-300 mb-2" />
                         <h4 className="text-base font-bold text-slate-800">No Upcoming Events</h4>
                         <p className="text-xs text-slate-500 max-w-sm mt-1 font-medium">
@@ -212,6 +226,8 @@ function Home({
 
                 </div>
               </div>
+
+
 
             </>
           )}
