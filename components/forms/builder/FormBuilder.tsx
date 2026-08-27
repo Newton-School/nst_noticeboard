@@ -155,20 +155,6 @@ export default function FormBuilder({
           className="mt-3 text-sm"
         />
 
-        <div className="mt-4 flex items-center gap-2 border-t border-[#E6E2D8] pt-3">
-          <input
-            id="accepting"
-            type="checkbox"
-            checked={draft.acceptingResponses}
-            onChange={(event) =>
-              update({ acceptingResponses: event.target.checked })
-            }
-            className="size-4 rounded-lg accent-[#121316]"
-          />
-          <label htmlFor="accepting" className="text-sm text-gray-700">
-            Accepting responses
-          </label>
-        </div>
       </div>
 
       {draft.questions.map((question, index) => (

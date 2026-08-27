@@ -9,6 +9,7 @@ import {
   questionsFromDraft,
   validateFormDraft,
 } from "@/lib/form-schema";
+import { DEFAULT_SETTINGS } from "@/lib/forms";
 import { SaveFormState } from "@/types/form";
 
 function failure(message: string): SaveFormState {
@@ -51,7 +52,6 @@ export async function saveForm(
   const fields = {
     title: draft.title.trim(),
     description: draft.description.trim(),
-    acceptingResponses: draft.acceptingResponses,
     questions: questionsFromDraft(draft),
     updatedAt: now,
   };
@@ -61,7 +61,7 @@ export async function saveForm(
   if (formId === null) {
     const result = await db
       .collection("form")
-      .insertOne({ ...fields, createdAt: now });
+      .insertOne({ ...fields, ...DEFAULT_SETTINGS, createdAt: now });
     savedId = result.insertedId.toString();
   } else {
     const result = await db

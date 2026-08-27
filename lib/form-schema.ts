@@ -75,7 +75,6 @@ export function newFormDraft(): FormDraft {
   return {
     title: "",
     description: "",
-    acceptingResponses: true,
     questions: [newQuestion()],
   };
 }
@@ -84,7 +83,6 @@ export function draftFromForm(form: IForm): FormDraft {
   return {
     title: form.title ?? "",
     description: form.description ?? "",
-    acceptingResponses: form.acceptingResponses ?? true,
     questions: (form.questions ?? []).map((question) => ({
       id: question.id,
       type: question.type,
@@ -204,7 +202,6 @@ export function parseFormDraft(input: unknown): FormDraft | null {
   return {
     title: readString(raw.title),
     description: readString(raw.description),
-    acceptingResponses: raw.acceptingResponses !== false,
     questions,
   };
 }
