@@ -22,12 +22,18 @@ export interface IQuestion {
   choices?: IChoice[];
 }
 
-export interface IForm {
+export interface FormSettings {
+  acceptingResponses: boolean;
+  oneResponsePerUser: boolean;
+  confirmationMessage: string;
+  closedMessage: string;
+}
+
+export interface IForm extends FormSettings {
   _id: ObjectId | string;
   title: string;
   description?: string;
   questions: IQuestion[];
-  acceptingResponses: boolean;
   createdAt: Date | string;
   updatedAt: Date | string;
 }
@@ -48,3 +54,44 @@ export type SubmitState =
   | { status: "idle" }
   | { status: "error"; errors: FormErrors; message?: string }
   | { status: "success" };
+
+export interface QuestionDraft {
+  id: string;
+  type: QuestionType;
+  title: string;
+  description: string;
+  required: boolean;
+  choices: IChoice[];
+}
+
+export interface FormDraft {
+  title: string;
+  description: string;
+  questions: QuestionDraft[];
+}
+
+export type SaveFormState =
+  | { status: "idle" }
+  | { status: "error"; errors: FormErrors; message?: string }
+  | { status: "saved"; formId: string };
+
+export interface FormSummary {
+  _id: string;
+  title: string;
+  questionCount: number;
+  responseCount: number;
+  acceptingResponses: boolean;
+  updatedAt: string;
+}
+
+export type SettingsState =
+  | { status: "idle" }
+  | { status: "error"; message: string }
+  | { status: "saved" };
+
+export interface ResponseRow {
+  _id: string;
+  respondentEmail: string | null;
+  submittedAt: string;
+  answers: Record<string, AnswerValue>;
+}
