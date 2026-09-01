@@ -17,7 +17,11 @@ export function QuestionCard({
       data-question-id={question.id}
       className="rounded-lg border bg-background p-6"
     >
-      <label htmlFor={question.id} className="block text-base">
+      <label
+        id={`${question.id}-label`}
+        htmlFor={question.id}
+        className="block text-base"
+      >
         {question.title}
         {question.required && (
           <span className="ml-1 text-red-600" aria-hidden="true">

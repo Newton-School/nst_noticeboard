@@ -78,14 +78,16 @@ function FormFill({
       <section className="mx-auto w-full max-w-2xl space-y-4 px-4 py-10">
         <div className="rounded-lg border bg-background p-6">
           <h1 className="text-2xl">{form.title}</h1>
-          <p className="mt-4 text-sm">Your response has been recorded.</p>
-          <button
-            type="button"
-            onClick={onSubmitAnother}
-            className="mt-4 text-sm text-blue-700 underline underline-offset-4"
-          >
-            Submit another response
-          </button>
+          <p className="mt-4 text-sm">{form.confirmationMessage}</p>
+          {!form.oneResponsePerUser && (
+            <button
+              type="button"
+              onClick={onSubmitAnother}
+              className="mt-4 text-sm text-blue-700 underline underline-offset-4"
+            >
+              Submit another response
+            </button>
+          )}
         </div>
       </section>
     );

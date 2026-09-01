@@ -3,8 +3,9 @@
 import { ObjectId } from "mongodb";
 import { auth } from "@/auth";
 import { getDb } from "@/lib/db";
+import { hasAlreadyResponded, loadForm } from "@/lib/forms";
 import { validateAnswers } from "@/lib/form-validation";
-import { AnswerValue, IForm, IQuestion, SubmitState } from "@/types/form";
+import { AnswerValue, IQuestion, SubmitState } from "@/types/form";
 
 function readAnswer(question: IQuestion, formData: FormData): AnswerValue {
   if (question.type === "CHECKBOXES") {
@@ -18,24 +19,36 @@ export async function submitResponse(
   _prevState: SubmitState,
   formData: FormData,
 ): Promise<SubmitState> {
-  if (!ObjectId.isValid(formId)) {
-    return { status: "error", errors: {}, message: "This form no longer exists." };
-  }
-
-  const db = await getDb();
-  const form = await db
-    .collection<IForm>("form")
-    .findOne({ _id: new ObjectId(formId) });
+  const form = await loadForm(formId);
 
   if (!form) {
-    return { status: "error", errors: {}, message: "This form no longer exists." };
-  }
-
-  if (!form.acceptingResponses) {
     return {
       status: "error",
       errors: {},
-      message: "This form is no longer accepting responses.",
+      message: "This form no longer exists.",
+    };
+  }
+
+  if (!form.acceptingResponses) {
+    return { status: "error", errors: {}, message: form.closedMessage };
+  }
+
+  const session = await auth();
+  const email = session?.user?.email;
+
+  if (!email) {
+    return {
+      status: "error",
+      errors: {},
+      message: "Please sign in to submit this form.",
+    };
+  }
+
+  if (form.oneResponsePerUser && (await hasAlreadyResponded(formId, email))) {
+    return {
+      status: "error",
+      errors: {},
+      message: "You have already responded to this form.",
     };
   }
 
@@ -49,12 +62,10 @@ export async function submitResponse(
     return { status: "error", errors };
   }
 
-  const session = await auth();
-
-  await db.collection("formResponse").insertOne({
+  await (await getDb()).collection("formResponse").insertOne({
     form: new ObjectId(formId),
     answers,
-    respondentEmail: session?.user?.email ?? undefined,
+    respondentEmail: email,
     submittedAt: new Date(),
   });
 
