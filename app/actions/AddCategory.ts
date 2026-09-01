@@ -1,27 +1,49 @@
-"use server"
+"use server";
+
 import { auth } from "@/auth";
 import { getDb } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-export async function addCategory(formDate:FormData): Promise<void> {
+export async function addCategory(formData: FormData) {
   const session = await auth();
-  if(!session || session.user.role !== "admin") {
-    throw new Error("Unauthorized access");
+  if (!session || session.user?.role !== "admin") {
+    return { error: "Unauthorized access" };
   }
 
-  const name = formDate.get("name")?.toString();
-  const description = formDate.get("description")?.toString();
-  const icon = formDate.get("icon")?.toString();
-  const color = formDate.get("color")?.toString();
+  const name = formData.get("name")?.toString()?.trim();
+  const description = formData.get("description")?.toString()?.trim() || "";
+  const icon = formData.get("icon")?.toString()?.trim() || "FileText";
+  const color = formData.get("color")?.toString()?.trim() || "blue";
 
-  if(!name || !description || !icon || !color) {
-    throw new Error("All fields are required");
+  if (!name) {
+    return { error: "Category name is required" };
   }
 
-  const db = await getDb();
-  await db.collection('category').insertOne({
-    name, description, icon, color
-  });
+  try {
+    const db = await getDb();
+    const result = await db.collection("category").insertOne({
+      name,
+      description,
+      icon,
+      color,
+    });
 
-  revalidatePath("/policy");
+    revalidatePath("/policy");
+    revalidatePath("/admin/policy");
+    revalidatePath("/policies");
+
+    return {
+      success: true,
+      category: {
+        _id: result.insertedId.toString(),
+        name,
+        description,
+        icon,
+        color,
+      },
+    };
+  } catch (err) {
+    console.error("Error adding category:", err);
+    return { error: "Failed to create category. Please try again." };
+  }
 }

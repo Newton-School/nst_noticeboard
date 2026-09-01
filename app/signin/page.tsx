@@ -25,32 +25,33 @@ export default async function SignInPage({searchParams}: {
     : undefined;
 
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-white dark:bg-zinc-950">
-      {/* Top Banner (Mobile) / Left Side Hero (Desktop) */}
-      <div
-        className="w-full md:w-1/2 h-56 sm:h-72 md:h-auto min-h-55 md:min-h-screen bg-cover bg-center relative flex items-center justify-center p-6"
-        style={{ backgroundImage: "url('/background.png')" }}
-      >
-        {/* Soft overlay */}
-        <div className="absolute inset-0 bg-black/25 backdrop-blur-[1px]" />
+    <div className="bg-[#F5F0E6] min-h-screen p-3 sm:p-6 font-sans antialiased text-[#0d0e12] relative flex items-center justify-center">
+      {/* INNER FRAMED CANVAS CONTAINER */}
+      <div className="w-full max-w-[1180px] mx-auto bg-white rounded-[24px] sm:rounded-[32px] overflow-hidden shadow-xl border border-[#E6E2D8]/80 flex flex-col md:flex-row min-h-[600px] relative">
+        
+        {/* LEFT HERO / BRANDING BANNER */}
+        <div
+          className="w-full md:w-5/12 min-h-[200px] md:min-h-full bg-cover bg-right-bottom relative flex flex-col justify-center p-8 sm:p-12 text-white overflow-hidden"
+          style={{ backgroundImage: "url('/bg_main.png')" }}
+        >
+          {/* Subtle Overlay */}
+          <div className="absolute inset-0 bg-blue-950/20 backdrop-blur-[2px]" />
 
-        {/* Banner Text / Branding */}
-        <div className="relative z-10 text-center text-white max-w-sm">
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight drop-shadow-md">
-            Noticeboard Portal
-          </h2>
-          <p className="text-xs sm:text-sm text-zinc-200 mt-2 font-medium drop-shadow">
-            Stay updated with official announcements, policies, and notifications.
-          </p>
+          {/* Hero Content */}
+          <div className="relative z-10 space-y-2 max-w-sm">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight text-white drop-shadow-md">
+              Newton School of Technology
+            </h2>
+          </div>
         </div>
-      </div>
 
-      {/* Form Section (Bottom on Mobile / Right Side on Desktop) */}
-      <div className="w-full md:w-1/2 flex-1 flex items-center justify-center p-6 sm:p-10 md:p-12 bg-white dark:bg-zinc-950">
-        <LoginForm
-          callbackUrl={callbackUrl}
-          errorMessage={errorMessage}
-        />
+        {/* RIGHT FORM SECTION */}
+        <div className="w-full md:w-7/12 flex items-center justify-center p-6 sm:p-12 lg:p-16 bg-white">
+          <LoginForm
+            callbackUrl={callbackUrl}
+            errorMessage={errorMessage}
+          />
+        </div>
       </div>
     </div>
   );

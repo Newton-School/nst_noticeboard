@@ -52,11 +52,11 @@ export default async function AdminPolicyPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
             <Link
-              href="/"
+              href="/admin"
               className="inline-flex items-center gap-1.5 text-[13.5px] font-bold text-gray-500 hover:text-black transition-colors mb-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to Portal
+              Back
             </Link>
             <h1 className="text-3xl sm:text-[34px] font-extrabold text-[#0d0e12] tracking-tight">
               Admin Control Panel

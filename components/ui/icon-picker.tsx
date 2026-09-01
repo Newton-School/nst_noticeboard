@@ -30,7 +30,7 @@ interface IconPickerProps {
   className?: string;
 }
 
-// Renders dynamic Lucide icon directly from static module map without dynamic imports/waterfalls
+// Renders dynamic Lucide icon directly from static module map
 export const IconHelper = ({ name, ...props }: { name: string } & LucideProps) => {
   const IconComponent = (Icons as unknown as Record<string, React.ComponentType<LucideProps>>)[name] || Icons.HelpCircle;
   return <IconComponent {...props} />;
@@ -61,30 +61,31 @@ export function IconPicker({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          type="button"
           variant="outline"
-          className={cn("w-full justify-between gap-2 font-normal", className)}
+          className={cn("w-full justify-between gap-2 font-medium cursor-pointer", className)}
         >
           <div className="flex items-center gap-2 truncate">
             {value ? (
               <>
-                <IconHelper name={value} className="h-4 w-4 text-primary shrink-0" />
-                <span>{value}</span>
+                <IconHelper name={value} className="h-4 w-4 text-blue-600 shrink-0" />
+                <span className="font-bold text-slate-800">{value}</span>
               </>
             ) : (
-              <span className="text-muted-foreground">{triggerPlaceholder}</span>
+              <span className="text-slate-400 font-medium">{triggerPlaceholder}</span>
             )}
           </div>
           <Icons.ChevronDown className="h-4 w-4 opacity-50 shrink-0" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-64 p-3" align="start">
+      <PopoverContent className="w-72 p-3 z-[10000] bg-white border border-[#E6E2D8] shadow-2xl rounded-2xl" align="start">
         <Input
           placeholder={searchPlaceholder}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="mb-3 h-8 text-xs"
+          className="mb-3 h-9 text-xs rounded-xl border-[#E6E2D8] bg-[#FAF9F6]"
         />
-        <div className="grid grid-cols-6 gap-1.5 max-h-48 overflow-y-auto pr-1">
+        <div className="grid grid-cols-6 gap-1.5 max-h-52 overflow-y-auto pr-1">
           {filteredIcons.map((iconName) => {
             const isSelected = value === iconName;
             return (
@@ -94,18 +95,18 @@ export function IconPicker({
                 title={iconName}
                 onClick={() => handleSelect(iconName)}
                 className={cn(
-                  "flex items-center justify-center h-9 w-9 rounded-md border text-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+                  "flex items-center justify-center h-9 w-9 rounded-xl border text-sm transition-all cursor-pointer",
                   isSelected
-                    ? "bg-primary text-primary-foreground border-primary hover:bg-primary/90 hover:text-primary-foreground"
-                    : "border-transparent hover:border-border"
+                    ? "bg-blue-600 text-white border-blue-600 shadow-xs"
+                    : "border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-slate-700"
                 )}
               >
-                <IconHelper name={iconName} className="h-4 w-4" />
+                <IconHelper name={iconName} className="h-4.5 w-4.5" />
               </button>
             );
           })}
           {filteredIcons.length === 0 && (
-            <div className="col-span-6 py-4 text-center text-xs text-muted-foreground">
+            <div className="col-span-6 py-4 text-center text-xs text-slate-400 font-medium">
               No matching icons found
             </div>
           )}
